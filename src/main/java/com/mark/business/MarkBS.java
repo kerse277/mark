@@ -81,12 +81,51 @@ public class MarkBS {
             Person person = personRepository.findByAuhtToken(markCollectObject.getPersonToken());
 
             Person markOwner = markRepository.findMarkOwner(markCollectObject.getMarkID());
-            markOwner.setPopularPoint(markOwner.getPopularPoint()+2);
+            markOwner.setPopularPoint(markOwner.getPopularPoint() + 2);
             markOwner.setPassiveMarkCount(markOwner.getPassiveMarkCount() + 1);
             markOwner.setActiveMarkCount(markOwner.getActiveMarkCount() - 1);
+            boolean isVar = false;
             try {
-                person.getCollectedMarks().add(objectMapper.writeValueAsString(new CollectedMark().setOwnerID(markOwner.getUniqueID()).setType(mark.getPlaceType())));
+                for (int i = 0; i < person.getCollectedMarks().size(); i++) {
+                    CollectedMark mark1 = objectMapper.readValue(person.getCollectedMarks().get(i), CollectedMark.class);
+                    if (markOwner.getUniqueID().equals(mark1.getOwnerID())) {
+                        person.getCollectedMarks().remove(i);
+                        int value = mark1.getMarkCount() + 1;
+                        mark1.setMarkCount(value);
+
+                        isVar = true;
+                        if (markOwner.getPopularPoint() < 10 && value >= 3)
+                            mark1.setMsgPermission(true);
+                        else if (markOwner.getPopularPoint() < 20 & value >= 4)
+                            mark1.setMsgPermission(true);
+                        else if (markOwner.getPopularPoint() < 30 && value >= 5)
+                            mark1.setMsgPermission(true);
+                        else if (markOwner.getPopularPoint() < 40 && value >= 6)
+                            mark1.setMsgPermission(true);
+                        else if (markOwner.getPopularPoint() < 50 && value >= 7)
+                            mark1.setMsgPermission(true);
+                        else if (markOwner.getPopularPoint() < 60 && value >= 8)
+                            mark1.setMsgPermission(true);
+                        else if (markOwner.getPopularPoint() < 70 && value >= 9)
+                            mark1.setMsgPermission(true);
+                        else if (markOwner.getPopularPoint() < 80 && value >= 10)
+                            mark1.setMsgPermission(true);
+                        else if (markOwner.getPopularPoint() < 90 && value >= 11)
+                            mark1.setMsgPermission(true);
+                        else if (markOwner.getPopularPoint() < 100 && value >= 12)
+                            mark1.setMsgPermission(true);
+                        person.getCollectedMarks().add(objectMapper.writeValueAsString(mark1));
+                        break;
+                    }
+                }
+                if (!isVar) {
+                    person.getCollectedMarks().add(objectMapper.writeValueAsString(new CollectedMark().setOwnerID(markOwner.getUniqueID()).setType(mark.getPlaceType()).setMarkCount(1).setMsgPermission(false)));
+                }
+
+
             } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             personRepository.save(markOwner);
@@ -183,8 +222,6 @@ public class MarkBS {
 
     }
 
-
-
     public CustomPerson markOwner(String markid) {
         Person person = markRepository.findMarkOwner(markid);
 
@@ -202,5 +239,29 @@ public class MarkBS {
                 .setUniqueID(person.getUniqueID())
                 .setWork(person.getWork());
         return customPerson;
+    }
+
+    public int calculateMsgLimit(int popPoint) {
+        if (popPoint < 10)
+            return 3;
+        else if (popPoint < 20)
+            return 4;
+        else if (popPoint < 30)
+            return 5;
+        else if (popPoint < 40)
+            return 6;
+        else if (popPoint < 50)
+            return 7;
+        else if (popPoint < 60)
+            return 8;
+        else if (popPoint < 70)
+            return 9;
+        else if (popPoint < 80)
+            return 10;
+        else if (popPoint < 90)
+            return 11;
+        else if (popPoint < 100)
+            return 12;
+        return 0; //gönderecek bişi bulamadım
     }
 }

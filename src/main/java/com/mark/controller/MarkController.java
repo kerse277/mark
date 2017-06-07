@@ -56,6 +56,7 @@ public class MarkController {
     @ResponseBody
     public CustomPerson markOwner(@RequestParam("markid") String markid){
         return markBS.markOwner(markid);
+
     }
 
 

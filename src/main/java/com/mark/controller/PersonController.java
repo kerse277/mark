@@ -39,6 +39,12 @@ public class PersonController {
         return personBS.myInfo(authToken);
     }
 
+    @GetMapping("showprofile")
+    @ResponseBody
+    public CustomPerson showProfile(@RequestParam("uid") String uid) {
+        return personBS.showProfile(uid);
+    }
+
     @GetMapping("getmycollectedmarks")
     @ResponseBody
     public List<CollectMarkAndPersons> getMyCollectMarks(@RequestParam("authtoken") String authToken){

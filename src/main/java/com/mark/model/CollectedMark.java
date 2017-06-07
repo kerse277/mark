@@ -15,4 +15,11 @@ public class CollectedMark {
     @Setter
     private String type;
 
+    @Getter
+    @Setter
+    private int markCount;
+
+    @Getter
+    @Setter
+    private boolean msgPermission;
 }

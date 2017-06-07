@@ -15,4 +15,8 @@ public class CollectMarkAndPersons {
     @Setter
     private int markCount;
 
+    @Setter
+    @Getter
+    private boolean msgPermision;
+
 }

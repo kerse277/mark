@@ -62,7 +62,7 @@ public class PersonBS {
             person1.setInstagram(person.getInstagram());
 
         personRepository.save(person1);
-        return "successful";
+        return "success";
 
     }
 
@@ -89,41 +89,35 @@ public class PersonBS {
         ObjectMapper mapper = new ObjectMapper();
         Person person = personRepository.findByAuhtToken(authToken);
         List<CollectMarkAndPersons> collectMarkAndPersonses = new ArrayList<>();
-        Map<String, Integer> map = new HashMap<>();
         for (String value : person.getCollectedMarks()) {
             try {
                 CollectedMark collectedMark = mapper.readValue(value, CollectedMark.class);
-                if (map.get(collectedMark.getOwnerID()) != null) {
-                    map.put(collectedMark.getOwnerID(), map.get(collectedMark.getOwnerID()) + 1);
-                } else {
-                    map.put(collectedMark.getOwnerID(), 1);
-                }
 
+                Person person1 = personRepository.findByUniqueID(collectedMark.getOwnerID());
+                CustomPerson customPerson = new CustomPerson()
+                        .setCollection(person1.getCollection())
+                        .setActiveMarkCount(person1.getActiveMarkCount())
+                        .setEmail(person1.getEmail())
+                        .setFirstName(person1.getFirstName())
+                        .setLastName(person1.getLastName())
+                        .setGender(person1.getGender())
+                        .setPopularPoint(person1.getPopularPoint())
+                        .setPassiveMarkCount(person1.getPassiveMarkCount())
+                        .setProfileDesc(person1.getProfileDesc())
+                        .setProfilePic(person1.getProfilePic())
+                        .setUniqueID(person1.getUniqueID())
+                        .setWork(person1.getWork());
+
+                CollectMarkAndPersons markAndPersons = new CollectMarkAndPersons()
+                        .setPerson(customPerson)
+                        .setMarkCount(collectedMark.getMarkCount())
+                        .setMsgPermision(collectedMark.isMsgPermission());
+                collectMarkAndPersonses.add(markAndPersons);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        List<String> keys = Arrays.asList(map.keySet().toArray(new String[]{}));
-        for (String key : keys) {
-            Person person1 = personRepository.findByUniqueID(key);
-            CustomPerson customPerson = new CustomPerson()
-                    .setCollection(person1.getCollection())
-                    .setActiveMarkCount(person1.getActiveMarkCount())
-                    .setEmail(person1.getEmail())
-                    .setFirstName(person1.getFirstName())
-                    .setLastName(person1.getLastName())
-                    .setGender(person1.getGender())
-                    .setPassiveMarkCount(person1.getPassiveMarkCount())
-                    .setProfileDesc(person1.getProfileDesc())
-                    .setProfilePic(person1.getProfilePic())
-                    .setUniqueID(person1.getUniqueID())
-                    .setWork(person1.getWork());
 
-            CollectMarkAndPersons markAndPersons = new CollectMarkAndPersons()
-                    .setPerson(customPerson)
-                    .setMarkCount(map.get(key));
-            collectMarkAndPersonses.add(markAndPersons);
-        }
 
         return collectMarkAndPersonses;
     }
@@ -147,6 +141,29 @@ public class PersonBS {
                 .setWork(person.getWork())
                 .setPopularPoint(person.getPopularPoint());
         return customPerson;
-
     }
+
+    public CustomPerson showProfile(String uid) {
+
+
+        Person person = personRepository.findByUniqueID(uid);
+        CustomPerson customPerson = new CustomPerson()
+                .setCollection(person.getCollection())
+                .setActiveMarkCount(person.getActiveMarkCount())
+                .setCollectedMarks(person.getCollectedMarks())
+                .setEmail(person.getEmail())
+                .setFirstName(person.getFirstName())
+                .setLastName(person.getLastName())
+                .setGender(person.getGender())
+                .setPassiveMarkCount(person.getPassiveMarkCount())
+                .setProfileDesc(person.getProfileDesc())
+                .setInstagram(person.getInstagram())
+                .setProfilePic(person.getProfilePic())
+                .setUniqueID(person.getUniqueID())
+                .setWork(person.getWork())
+                .setPopularPoint(person.getPopularPoint());
+
+        return customPerson;
+    }
+
 }
