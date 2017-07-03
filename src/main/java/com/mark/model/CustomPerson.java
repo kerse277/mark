@@ -66,6 +66,10 @@ public class CustomPerson {
 
     @Getter
     @Setter
+    private List<String> collectedCollection = new ArrayList<>();
+
+    @Getter
+    @Setter
     private int popularPoint;
 
 }

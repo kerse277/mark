@@ -96,6 +96,7 @@ public class PersonBS {
                 Person person1 = personRepository.findByUniqueID(collectedMark.getOwnerID());
                 CustomPerson customPerson = new CustomPerson()
                         .setCollection(person1.getCollection())
+                        .setCollectedCollection(person.getCollectedCollection())
                         .setActiveMarkCount(person1.getActiveMarkCount())
                         .setEmail(person1.getEmail())
                         .setFirstName(person1.getFirstName())
@@ -127,6 +128,7 @@ public class PersonBS {
 
         CustomPerson customPerson = new CustomPerson()
                 .setCollection(person.getCollection())
+                .setCollectedCollection(person.getCollectedCollection())
                 .setActiveMarkCount(person.getActiveMarkCount())
                 .setCollectedMarks(person.getCollectedMarks())
                 .setEmail(person.getEmail())
@@ -149,6 +151,7 @@ public class PersonBS {
         Person person = personRepository.findByUniqueID(uid);
         CustomPerson customPerson = new CustomPerson()
                 .setCollection(person.getCollection())
+                .setCollectedCollection(person.getCollectedCollection())
                 .setActiveMarkCount(person.getActiveMarkCount())
                 .setCollectedMarks(person.getCollectedMarks())
                 .setEmail(person.getEmail())

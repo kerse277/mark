@@ -18,8 +18,10 @@ public interface MarkRepository extends GraphRepository<Mark> {
 
     List<Mark> findByPlaceName(String placeName);
 
-
     @Query("Match (n:Person{authToken: {authToken} )<-[:Owner]-(m:Mark) where m.live = true return m")
+    List<Mark> findMyLiveMark(@Param("authToken") String authToken);
+
+    @Query("Match (n:Person{authToken: {authToken} )<-[:Owner]-(m:Mark)  return m")
     List<Mark> findMyMark(@Param("authToken") String authToken);
 
     @Query("Match (n:Mark{uniqueID: {uniqueID} })-[:Owner]->(m:Person) return m")

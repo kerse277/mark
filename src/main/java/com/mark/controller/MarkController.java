@@ -52,6 +52,12 @@ public class MarkController {
         return markBS.myMarks(authToken);
     }
 
+    @GetMapping("mylivemarks")
+    @ResponseBody
+    public List<Mark> myLiveMarks(@RequestParam("authtoken") String authToken){
+        return markBS.myLiveMarks(authToken);
+    }
+
     @GetMapping("markowner")
     @ResponseBody
     public CustomPerson markOwner(@RequestParam("markid") String markid){

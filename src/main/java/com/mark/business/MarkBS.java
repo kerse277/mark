@@ -65,6 +65,10 @@ public class MarkBS {
         return markRepository.findMyMark(authToken);
     }
 
+    public List<Mark> myLiveMarks(String authToken){
+        return markRepository.findMyLiveMark(authToken);
+    }
+
     public String collectMark(MarkCollectObject markCollectObject) {
 
         Mark mark = markRepository.findByUniqueID(markCollectObject.getMarkID());
@@ -92,6 +96,7 @@ public class MarkBS {
                         person.getCollectedMarks().remove(i);
                         int value = mark1.getMarkCount() + 1;
                         mark1.setMarkCount(value);
+
 
                         isVar = true;
                         if (markOwner.getPopularPoint() < 10 && value >= 3)
@@ -128,6 +133,7 @@ public class MarkBS {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            person.getCollectedCollection().add(mark.getPlaceType());
             personRepository.save(markOwner);
             mark.setLive(false);
             markRepository.save(mark);
@@ -227,6 +233,7 @@ public class MarkBS {
 
         CustomPerson customPerson = new CustomPerson()
                 .setCollection(person.getCollection())
+                .setCollectedCollection(person.getCollectedCollection())
                 .setActiveMarkCount(person.getActiveMarkCount())
                 .setCollectedMarks(person.getCollectedMarks())
                 .setEmail(person.getEmail())
